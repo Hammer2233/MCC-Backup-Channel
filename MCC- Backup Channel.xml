@@ -3,7 +3,7 @@
   <nextMetaDataId>2</nextMetaDataId>
   <name>MCC- Backup Channel</name>
   <description>Created automatically by MCC on CHANGETHATDATE</description>
-  <revision>3</revision>
+  <revision>4</revision>
   <sourceConnector version="3.6.1">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -76,13 +76,17 @@ var metadataXml = &quot;&quot;;
 
 if (metadata != null)
 {
-var rawMeta = serializer.serialize(metadata);
-//Manually wrap metadata to mimic a standard Mirth Export format
-var cleanMeta = rawMeta.toString()
-.replace(&apos;&lt;channelMetadata&gt;&apos;, &apos;&lt;metadata&gt;&apos;)
-.replace(&apos;&lt;/channelMetadata&gt;&apos;, &apos;&lt;/metadata&gt;&apos;);
+    var rawMeta = serializer.serialize(metadata);
+    
+    //1. Force to a JavaScript String to ensure we use JS replace()
+    var metaString = String(rawMeta); 
 
-metadataXml = &quot;\n  &lt;exportData&gt;\n    &quot; + cleanMeta + &quot;\n  &lt;/exportData&gt;&quot;;
+    //2. Perform the replacement
+    var cleanMeta = metaString
+        .replace(&quot;&lt;com.mirth.connect.model.ChannelMetadata&gt;&quot;, &quot;&lt;metadata&gt;&quot;)
+        .replace(&quot;&lt;/com.mirth.connect.model.ChannelMetadata&gt;&quot;, &quot;&lt;/metadata&gt;&quot;);
+
+    metadataXml = &quot;\n  &lt;exportData&gt;\n    &quot; + cleanMeta + &quot;\n  &lt;/exportData&gt;&quot;;
 }
 
 //Inject metadata before the closing channel tag
@@ -326,7 +330,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1774536482999</time>
+        <time>1774626381643</time>
         <timezone>America/Chicago</timezone>
       </lastModified>
       <pruningSettings>
